@@ -8,7 +8,7 @@ load_dotenv()
 api_ = os.getenv('api_key')
 
 
-def get_stock_data(symbol):
+def get_stock(symbol):
     url = 'https://www.alphavantage.co/query'
 
     params = {
@@ -65,8 +65,20 @@ def display_search(data):
     return matches
 
 
-def csv_():
-    pass
+def csv_(data, symbol):
+    daily = data["TIME_SERIES_DAILY"]
+
+    df = pd.DataFrame.from_dict(daily, orient="index")
+    df.columns = [col.split(". ")[1] for col in df.columns] 
+    df = df.astype(float)
+    df.index.name = "date"
+    df = df.sort_index()
+    filename = f"{symbol}.csv"
+    df.to_csv(filename)
+
+    print(f"The data has been saved to this file: {filename}")
+    return df
+
 
 def calculate_moving_average():
     pass
@@ -92,6 +104,10 @@ def main():
         symbol = matches[index]["1. symbol"]
     except(ValueError, IndexError):
         print("Invalid selection")
+        return
+
+    data = get_stock(symbol)
+    if not data:
         return
 
 
