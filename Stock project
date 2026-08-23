@@ -51,13 +51,24 @@ def search_company(keywords):
         print(f"Failed to retrieve data: {response.status_code}")
         return None
 
+
 def display_search(data):
+    matches = data["bestMatches"]
+
+    for i, match in enumerate(matches, start=1):
+        symbol = match["1. symbol"]
+        name = match["2. name"]
+        region = match["4. region"]
+
+        print(f"{i}. {symbol} - {name}, {region}")
+
+    return matches
+
+
+def csv_():
     pass
 
 def calculate_moving_average():
-    pass
-
-def csv_():
     pass
 
 def plot_trends():
@@ -68,11 +79,23 @@ def display_trends():
 
 def main():
     keywords = input("Enter a company: ").upper()
-    search_results = search_company(keywords)
-    print(search_results)
+    results = search_company(keywords)
+
+    if results:
+        return
+
+    matches = display_search(results)
+
+    choice = input("\nEnter the company's name you are looking for: ")
+    try:
+        index = int(choice) - 1
+        symbol = matches[index]["1. symbol"]
+    except(ValueError, IndexError):
+        print("Invalid selection")
+        return
+
 
 
 
 if __name__ == '__main__':
     main()
-
