@@ -22,7 +22,7 @@ def get_stock_data(symbol):
     if response.status_code == 200:
         data = response.json()
         if "Time Series (Daily)" not in data:
-            print("No time series data found. The symbol may be invalid or the API limit was reached.")
+            print("No time series data found.")
             return None
         return data
     else:
@@ -57,7 +57,13 @@ def display_search(data):
 def calculate_moving_average():
     pass
 
-def plot_trend():
+def csv_():
+    pass
+
+def plot_trends():
+    pass
+
+def display_trends():
     pass
 
 def main():
