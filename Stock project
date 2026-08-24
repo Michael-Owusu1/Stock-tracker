@@ -97,8 +97,26 @@ def plot_trends(df, symbol, window):
     plt.show()
 
 
-def display_trends():
-    pass
+def display_trends(df, symbol, window):
+    latest = df.iloc[-1]
+    latest_close = latest["close"]
+    latest_avg = latest["moving_avg"]
+    print(f"\n {symbol} Trend Summary ")
+    print(f"The Latest Closing Price: {latest_close:.2f}")
+
+    if pd.isna(latest_avg):
+        print("There is not enough data to calculate the moving average.")
+    else:
+        print(f"{window} day/s Moving Average: {latest_avg:.2f}  ")
+
+    if latest_close > latest_avg:
+        print("There is an upwards trend!! Closing Price is ABOVE the moving average. ")
+    else:
+        print("There is a downwards trend!! Closing Price is BELOW the moving average.")
+
+    print("\nRecent data:")
+    print(df.tail(10))
+
 
 def main():
     keywords = input("Enter a company: ").upper()
@@ -132,6 +150,7 @@ def main():
 
     df = csv_(data, symbol)
     df = calculate_moving_average(df, window=window)
+    display_trends(df, symbol, window)
     plot_trends(df, symbol, window)
 
 
