@@ -84,8 +84,18 @@ def calculate_moving_average(df, window=30):
     df["moving_avg"] = df["close"].rolling(window = window).mean()
     return df    
 
-def plot_trends():
-    pass
+def plot_trends(df, symbol, window):
+    plt.figure(figsize=(10, 5))
+    plt.plot(df.index, df["close"], label = "Closing Price")
+    plt.plot(df.index, df["moving_avg"], label = f"{window} day/s Moving Average")
+    plt.symbol(f"{symbol}'s Trending Price")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.xticks(rotation = 45)
+    plt.legend
+    plt.tight_layout()
+    plt.show()
+
 
 def display_trends():
     pass
@@ -120,6 +130,9 @@ def main():
         window = 30
     df = calculate_moving_average(df, window=window)
 
+    df = csv_(data, symbol)
+    df = calculate_moving_average(df, window=window)
+    plot_trends(df, symbol, window)
 
 
 if __name__ == '__main__':
