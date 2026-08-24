@@ -80,7 +80,7 @@ def csv_(data, symbol):
     return df
 
 
-def calculate_moving_average(df, window):
+def calculate_moving_average(df, window=30):
     df["moving_avg"] = df["close"].rolling(window = window).mean()
     return df    
 
@@ -111,6 +111,14 @@ def main():
     if not data:
         return
 
+    window_input = input("Enter the amount of days you would like to see for the moving average: ")
+
+    try:
+        window = int(window_input)
+    except ValueError:
+        print("Invalid input, the selected number will be 30")
+        window = 30
+    df = calculate_moving_average(df, window=window)
 
 
 
