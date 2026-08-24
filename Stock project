@@ -80,8 +80,9 @@ def csv_(data, symbol):
     return df
 
 
-def calculate_moving_average():
-    pass
+def calculate_moving_average(df, window):
+    df["moving_avg"] = df["close"].rolling(window = window).mean()
+    return df    
 
 def plot_trends():
     pass
