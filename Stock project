@@ -66,7 +66,7 @@ def display_search(data):
 
 
 def csv_(data, symbol):
-    daily = data["TIME_SERIES_DAILY"]
+    daily = data["Time Series (Daily)"]
 
     df = pd.DataFrame.from_dict(daily, orient="index")
     df.columns = [col.split(". ")[1] for col in df.columns] 
@@ -88,11 +88,12 @@ def plot_trends(df, symbol, window):
     plt.figure(figsize=(10, 5))
     plt.plot(df.index, df["close"], label = "Closing Price")
     plt.plot(df.index, df["moving_avg"], label = f"{window} day/s Moving Average")
-    plt.symbol(f"{symbol}'s Trending Price")
+    plt.title(f"{symbol}'s Trending Price")
     plt.xlabel("Date")
     plt.ylabel("Price")
-    plt.xticks(rotation = 45)
-    plt.legend
+    step = max(1, len(df.index) // 15)
+    plt.xticks(ticks=range(0, len(df.index), step), labels=df.index[::step], rotation=45)
+    plt.legend()
     plt.tight_layout()
     plt.show()
 
@@ -109,10 +110,10 @@ def display_trends(df, symbol, window):
     else:
         print(f"{window} day/s Moving Average: {latest_avg:.2f}  ")
 
-    if latest_close > latest_avg:
-        print("There is an upwards trend!! Closing Price is ABOVE the moving average. ")
-    else:
-        print("There is a downwards trend!! Closing Price is BELOW the moving average.")
+        if latest_close > latest_avg:
+            print("There is an upwards trend!! Closing Price is ABOVE the moving average. ")
+        else:
+            print("There is a downwards trend!! Closing Price is BELOW the moving average.")
 
     print("\nRecent data:")
     print(df.tail(10))
@@ -122,12 +123,16 @@ def main():
     keywords = input("Enter a company: ").upper()
     results = search_company(keywords)
 
-    if results:
+    if not results:
+        return
+
+    if not results or not results.get("bestMatches"):
+        print("No matches found for that company. Try a different name.")
         return
 
     matches = display_search(results)
 
-    choice = input("\nEnter the company's name you are looking for: ")
+    choice = input("\nEnter the number of the company's name you are looking for: ")
     try:
         index = int(choice) - 1
         symbol = matches[index]["1. symbol"]
@@ -146,7 +151,7 @@ def main():
     except ValueError:
         print("Invalid input, the selected number will be 30")
         window = 30
-    df = calculate_moving_average(df, window=window)
+    
 
     df = csv_(data, symbol)
     df = calculate_moving_average(df, window=window)
