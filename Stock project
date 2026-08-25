@@ -9,6 +9,11 @@ api_ = os.getenv('api_key')
 
 
 def get_stock(symbol):
+    """
+    Grabs historical daily data from the selected Ticker symbol from the Alpha Vantage Time Series Daily endpoint.    
+    
+    """
+
     url = 'https://www.alphavantage.co/query'
 
     params = {
@@ -31,6 +36,12 @@ def get_stock(symbol):
         
 
 def search_company(keywords):
+    """
+    Searches the for companies with matching or similar keyword using the Symbol Search.
+
+    """
+
+
     url = 'https://www.alphavantage.co/query'
     
     params = {
@@ -53,6 +64,10 @@ def search_company(keywords):
 
 
 def display_search(data):
+    """
+    Prints a list of the available companies allowing user to choose from.
+    """
+
     matches = data["bestMatches"]
 
     for i, match in enumerate(matches, start=1):
@@ -66,6 +81,10 @@ def display_search(data):
 
 
 def csv_(data, symbol):
+    """
+    Converts JSON data into a panda DataFrame and saves it into a csv file.
+    """
+
     daily = data["Time Series (Daily)"]
 
     df = pd.DataFrame.from_dict(daily, orient="index")
@@ -81,10 +100,18 @@ def csv_(data, symbol):
 
 
 def calculate_moving_average(df, window=30):
+    """
+    Calculates the moving average of the closing price and adds a new coloumn to the DataFrame
+    """
+
     df["moving_avg"] = df["close"].rolling(window = window).mean()
     return df    
 
 def plot_trends(df, symbol, window):
+    """
+    Plots the graph of closing price and the moving average using Date and Price. 
+    """
+
     plt.figure(figsize=(10, 5))
     plt.plot(df.index, df["close"], label = "Closing Price")
     plt.plot(df.index, df["moving_avg"], label = f"{window} day/s Moving Average")
@@ -99,6 +126,9 @@ def plot_trends(df, symbol, window):
 
 
 def display_trends(df, symbol, window):
+    """ 
+    Prints a Summarry of the data collected e.g.(close price, moving_avg etc.) and shows a comparison between them.
+    """
     latest = df.iloc[-1]
     latest_close = latest["close"]
     latest_avg = latest["moving_avg"]
@@ -120,6 +150,11 @@ def display_trends(df, symbol, window):
 
 
 def main():
+    """
+    Runs the whole program allowing user interactions and displays the neccessary information and data at the end.
+    """
+
+
     keywords = input("Enter a company: ").upper()
     results = search_company(keywords)
 
