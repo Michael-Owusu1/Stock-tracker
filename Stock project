@@ -26,6 +26,11 @@ def get_stock(symbol):
 
     if response.status_code == 200:
         data = response.json()
+
+        if "Note" in data or "Information" in data:
+            print("API rate limit reached. Please wait a minute (or try again tomorrow) before searching again.")
+            return None
+
         if "Time Series (Daily)" not in data:
             print("No time series data found.")
             return None
@@ -41,7 +46,6 @@ def search_company(keywords):
 
     """
 
-
     url = 'https://www.alphavantage.co/query'
     
     params = {
@@ -54,6 +58,11 @@ def search_company(keywords):
     
     if response.status_code == 200:
         data = response.json()
+
+        if "Note" in data or "Information" in data:
+            print("API rate limit reached. Please wait a minute (or try again tomorrow) before searching again.")
+            return None
+
         if "bestMatches" not in data:
             print("No matches found.")
             return None
